@@ -99,16 +99,14 @@ $subjects = $subjects->fetchAll();
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Day</label>
-            <select name="day" id="sDay" class="form-control">
-              <option value="">Select</option>
-              <option value="MWF">MWF</option>
-              <option value="TTh">TTh</option>
-              <option value="MW">MW</option>
-              <option value="TF">TF</option>
-              <option value="Sat">Saturday</option>
-              <option value="Daily">Daily</option>
-            </select>
+            <label class="form-label">Day Schedule</label>
+            <div class="flex gap-2" style="flex-wrap:wrap; background:var(--slate-50); padding:.75rem; border-radius:var(--radius-sm); border:1px solid var(--slate-200);">
+              <?php foreach(['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] as $d): ?>
+                <label style="display:flex; align-items:center; gap:.4rem; font-size:.85rem; cursor:pointer; min-width:90px;">
+                  <input type="checkbox" name="day[]" value="<?= $d ?>" class="day-check"> <?= $d ?>
+                </label>
+              <?php endforeach; ?>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label">Room</label>
@@ -141,7 +139,13 @@ $subjects = $subjects->fetchAll();
 function editSchedule(s){
   document.getElementById('sSubjectId').value = s.id;
   document.getElementById('sSubjectName').value = s.course_no + ' - ' + s.descriptive_title;
-  document.getElementById('sDay').value = s.day||'';
+  
+  // Handle checkboxes
+  const selectedDays = (s.day || '').split(',');
+  document.querySelectorAll('.day-check').forEach(cb => {
+    cb.checked = selectedDays.includes(cb.value);
+  });
+
   document.getElementById('sRoom').value = s.room||'';
   document.getElementById('sStart').value = s.time_start||'';
   document.getElementById('sEnd').value = s.time_end||'';

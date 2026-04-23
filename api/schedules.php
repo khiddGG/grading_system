@@ -6,7 +6,8 @@ requireRole('instructor');
 $db = getDB();
 
 $subjectId = $_POST['subject_id'];
-$day = $_POST['day'] ?? '';
+$dayData = $_POST['day'] ?? '';
+$day = is_array($dayData) ? implode(',', $dayData) : $dayData;
 $timeStart = $_POST['time_start'] ?? null;
 $timeEnd = $_POST['time_end'] ?? null;
 $room = trim($_POST['room'] ?? '');
